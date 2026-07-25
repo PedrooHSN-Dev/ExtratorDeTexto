@@ -27,18 +27,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     return true; // Exigido pelo Chrome para indicar que a resposta (sendResponse) é assíncrona
   }
+
+  // Tira print da aba visível atual
+  if (request.action === 'tirarPrint') {
+    chrome.tabs.captureVisibleTab(null, { format: 'png' }, (imageUri) => {
+      sendResponse({ imageUri: imageUri });
+    });
+    return true; // Mantém a conexão aberta para o sendResponse assíncrono
+  }
 });
 
-// 1. Quando você clicar no ícone da extensão, ele manda o content.js desenhar a tela
+// Quando você clicar no ícone da extensão, ele manda o content.js desenhar a tela
 chrome.action.onClicked.addListener((tab) => {
   chrome.tabs.sendMessage(tab.id, { action: 'iniciarSelecao' });
 });
-
-// 2. Adicione esta condição DENTRO do seu chrome.runtime.onMessage.addListener existente
-if (request.action === 'tirarPrint') {
-  // Tira print da aba visível atual
-  chrome.tabs.captureVisibleTab(null, { format: 'png' }, (imageUri) => {
-    sendResponse({ imageUri: imageUri });
-  });
-  return true; // Mantém a conexão aberta para o sendResponse assíncrono
-}
