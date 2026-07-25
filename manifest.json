@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "OCR Silencioso",
+  "version": "1.0",
+  "description": "Recorta a tela e copia o texto de forma invisível.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Iniciar Recorte"
+  }
+}
